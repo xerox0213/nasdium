@@ -1,0 +1,14 @@
+# lockfile
+pnpm-lock.yaml
+
+# deps & builds
+dist
+node_modules
+
+# auto-generated files (frontend)
+typed-router.d.ts
+auto-imports.d.ts
+components.d.ts
+
+# migrations (backend)
+drizzle

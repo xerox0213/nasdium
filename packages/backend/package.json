@@ -1,0 +1,25 @@
+{
+  "name": "@nasdium/backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/main.ts",
+    "fmt": "prettier .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "tsc:check": "tsc --noEmit",
+    "db:push": "bunx drizzle-kit push"
+  },
+  "exports": {
+    ".": "./src/main.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.3",
+    "drizzle-orm": "^0.45.2",
+    "hono": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "drizzle-kit": "^0.31.10"
+  }
+}
