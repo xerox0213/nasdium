@@ -14,7 +14,9 @@
     ".": "./src/main.ts"
   },
   "dependencies": {
+    "@hono/standard-validator": "^0.2.2",
     "@libsql/client": "^0.17.3",
+    "@nasdium/shared": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "hono": "catalog:"
   },
