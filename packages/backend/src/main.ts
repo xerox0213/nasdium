@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 
+import auth from "./features/auth/auth.routes";
+
 const app = new Hono();
 
-app.get("/", (c) => {
-  return c.json({ message: "Hello World" });
-});
+app.route("/", auth);
 
 export default app;
