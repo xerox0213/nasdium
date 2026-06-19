@@ -1,6 +1,7 @@
 import ui from "@nuxt/ui/vite";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 import VueRouter from "vue-router/vite";
 
 // https://vite.dev/config/
@@ -15,8 +16,6 @@ export default defineConfig({
         },
       },
     }),
+    tsconfigPaths(),
   ],
-  resolve: {
-    tsconfigPaths: true,
-  },
 });
