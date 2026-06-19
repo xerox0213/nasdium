@@ -6,7 +6,8 @@
     "fmt": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "tsc:check": "pnpm -r --parallel tsc:check"
+    "tsc:check": "pnpm -r --parallel tsc:check",
+    "db:push": "pnpm -F @nasdium/backend db:push"
   },
   "packageManager": "pnpm@10.32.1",
   "devDependencies": {
