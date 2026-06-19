@@ -2,8 +2,10 @@ import { sValidator } from "@hono/standard-validator";
 import { loginSchema, registerSchema } from "@nasdium/shared/schemas";
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
+import { getCookie } from "hono/cookie";
 
 import { db } from "@/core/db";
+import { REFRESH_TOKEN_COOKIE_NAME } from "@/shared/constants/auth.const";
 import { refreshTokensTable } from "@/tables/auth.table";
 import { usersTable } from "@/tables/users.table";
 
@@ -65,6 +67,62 @@ app
       .values({ hash: refreshTokenHashed, userId: user.id });
 
     createRefreshTokenCookie(c, refreshToken);
+
+    return c.body(null, 204);
+  })
+  .post("/refresh", async (c) => {
+    const refreshTokenCookie = getCookie(c, REFRESH_TOKEN_COOKIE_NAME);
+
+    if (!refreshTokenCookie) {
+      return c.body(null, 401);
+    }
+
+    const refreshTokenCookieHashed = hashRefreshToken(refreshTokenCookie);
+
+    const [refreshToken] = await db
+      .select()
+      .from(refreshTokensTable)
+      .where(eq(refreshTokensTable.hash, refreshTokenCookieHashed));
+
+    if (!refreshToken) {
+      return c.body(null, 401);
+    }
+
+    if (refreshToken.revokedAt != null) {
+      await db
+        .update(refreshTokensTable)
+        .set({ revokedAt: new Date() })
+        .where(eq(refreshTokensTable.userId, refreshToken.userId));
+
+      return c.body(null, 401);
+    }
+
+    if (refreshToken.expiresAt <= new Date()) {
+      return c.body(null, 401);
+    }
+
+    const accessToken = await createAccessToken(refreshToken.userId);
+
+    const newRefreshToken = await db.transaction(async (tx) => {
+      const newRefreshToken = createRefreshToken();
+
+      const newRefreshTokenHashed = hashRefreshToken(newRefreshToken);
+
+      await tx
+        .insert(refreshTokensTable)
+        .values({ hash: newRefreshTokenHashed, userId: refreshToken.userId });
+
+      await tx
+        .update(refreshTokensTable)
+        .set({ revokedAt: new Date() })
+        .where(eq(refreshTokensTable.id, refreshToken.id));
+
+      return newRefreshToken;
+    });
+
+    createAccessTokenCookie(c, accessToken);
+
+    createRefreshTokenCookie(c, newRefreshToken);
 
     return c.body(null, 204);
   });
