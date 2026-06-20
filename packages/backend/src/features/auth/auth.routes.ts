@@ -22,9 +22,7 @@ import {
   hashRefreshToken,
 } from "./auth.service";
 
-const app = new Hono();
-
-app
+const app = new Hono()
   .post("/register", sValidator("json", registerSchema), async (c) => {
     const user = c.req.valid("json");
 
