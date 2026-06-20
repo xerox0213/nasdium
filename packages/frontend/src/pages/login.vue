@@ -4,11 +4,16 @@ import { HttpError } from "@/shared/errors/http-error";
 import { loginSchema } from "@nasdium/shared/schemas";
 import type { AlertProps, AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 import { useMutation } from "@tanstack/vue-query";
+import { useHead } from "@unhead/vue";
 import { ref } from "vue";
 import * as z from "zod";
 
 definePage({
   name: "login",
+});
+
+useHead({
+  title: "Log in",
 });
 
 // Validation schema

@@ -6,9 +6,14 @@ import { ref } from "vue";
 import { useMutation } from "@tanstack/vue-query";
 import { register } from "@/features/auth/auth.api";
 import { HttpError } from "@/shared/errors/http-error";
+import { useHead } from "@unhead/vue";
 
 definePage({
   name: "register",
+});
+
+useHead({
+  title: "Sign up",
 });
 
 // Validation schema
