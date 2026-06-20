@@ -2,10 +2,15 @@ import { sValidator } from "@hono/standard-validator";
 import { loginSchema, registerSchema } from "@nasdium/shared/schemas";
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
-import { getCookie } from "hono/cookie";
+import { deleteCookie, getCookie } from "hono/cookie";
 
 import { db } from "@/core/db";
-import { REFRESH_TOKEN_COOKIE_NAME } from "@/shared/constants/auth.const";
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  ACCESS_TOKEN_COOKIE_OPTS,
+  REFRESH_TOKEN_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_OPTS,
+} from "@/shared/constants/auth.const";
 import { refreshTokensTable } from "@/tables/auth.table";
 import { usersTable } from "@/tables/users.table";
 
@@ -123,6 +128,22 @@ app
     createAccessTokenCookie(c, accessToken);
 
     createRefreshTokenCookie(c, newRefreshToken);
+
+    return c.body(null, 204);
+  })
+  .delete("/logout", async (c) => {
+    const refreshToken = getCookie(c, REFRESH_TOKEN_COOKIE_NAME);
+
+    if (refreshToken != undefined) {
+      await db
+        .update(refreshTokensTable)
+        .set({ revokedAt: new Date() })
+        .where(eq(refreshTokensTable.hash, hashRefreshToken(refreshToken)));
+
+      deleteCookie(c, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTS);
+    }
+
+    deleteCookie(c, ACCESS_TOKEN_COOKIE_NAME, ACCESS_TOKEN_COOKIE_OPTS);
 
     return c.body(null, 204);
   });
