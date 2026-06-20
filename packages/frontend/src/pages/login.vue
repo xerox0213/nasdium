@@ -7,6 +7,10 @@ import { useMutation } from "@tanstack/vue-query";
 import { ref } from "vue";
 import * as z from "zod";
 
+definePage({
+  name: "login",
+});
+
 // Validation schema
 type Schema = z.infer<typeof loginSchema>;
 
@@ -81,6 +85,15 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
       >
         <template #validation>
           <UAlert v-if="alert" v-bind="alert" />
+        </template>
+
+        <template #footer>
+          <p>
+            New here?
+            <ULink :to="{ name: 'register' }" class="font-bold">
+              Create an account
+            </ULink>
+          </p>
         </template>
       </UAuthForm>
     </UPageBody>

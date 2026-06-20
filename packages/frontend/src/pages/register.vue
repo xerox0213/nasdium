@@ -7,6 +7,10 @@ import { useMutation } from "@tanstack/vue-query";
 import { register } from "@/features/auth/auth.api";
 import { HttpError } from "@/shared/errors/http-error";
 
+definePage({
+  name: "register",
+});
+
 // Validation schema
 const schema = registerSchema
   .extend({
@@ -114,6 +118,13 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
       >
         <template #validation>
           <UAlert v-if="alert" v-bind="alert" />
+        </template>
+
+        <template #footer>
+          <p>
+            Already a member?
+            <ULink :to="{ name: 'login' }" class="font-bold">Sign in</ULink>
+          </p>
         </template>
       </UAuthForm>
     </UPageBody>
