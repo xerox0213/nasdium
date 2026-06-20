@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 
 import { db } from "@/core/db";
 import { authMiddleware } from "@/middlewares/auth.middleware";
@@ -18,7 +19,7 @@ const app = new Hono().get("/me", authMiddleware, async (c) => {
     .from(usersTable)
     .where(eq(usersTable.id, userId));
 
-  if (!user) return c.notFound();
+  if (!user) throw new HTTPException(401);
 
   return c.json(user);
 });
