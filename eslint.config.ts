@@ -11,7 +11,12 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"],
     plugins: { js },
     extends: ["js/recommended"],
-    languageOptions: { globals: { ...globals.browser, ...globals.node, 'useToast' } },
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
   },
   tseslint.configs.recommended,
 
@@ -25,6 +30,15 @@ export default defineConfig([
     files: ["**/pages/*.vue"],
     rules: {
       "vue/multi-word-component-names": "off",
+    },
+  },
+
+  // TypeScript already validates undefined identifiers (and knows about
+  // auto-imports), so `no-undef` is redundant and false-positives on them.
+  {
+    files: ["**/*.{ts,mts,cts,vue}"],
+    rules: {
+      "no-undef": "off",
     },
   },
 
