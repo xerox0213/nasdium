@@ -3,5 +3,6 @@ declare module "bun" {
     DB_URL: string;
     JWT_SECRET: string;
     COOKIE_DOMAIN: string;
+    FRONTEND_ORIGIN: string;
   }
 }
