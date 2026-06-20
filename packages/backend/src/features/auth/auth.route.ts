@@ -3,6 +3,7 @@ import { loginSchema, registerSchema } from "@nasdium/shared/schemas";
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { deleteCookie, getCookie } from "hono/cookie";
+import { HTTPException } from "hono/http-exception";
 
 import { db } from "@/core/db";
 import {
@@ -35,10 +36,10 @@ const app = new Hono()
       .returning();
 
     if (inserted.length == 0) {
-      return c.json({ message: "Email already exists" }, 409);
+      throw new HTTPException(409);
     }
 
-    return c.json({ message: "Registered" }, 201);
+    return c.body(null, 201);
   })
   .post("/login", sValidator("json", loginSchema), async (c) => {
     const credentials = c.req.valid("json");
@@ -54,7 +55,7 @@ const app = new Hono()
       (await Bun.password.verify(credentials.password, user.password));
 
     if (!isValid) {
-      return c.json({ message: "Invalid email or password" }, 401);
+      throw new HTTPException(401);
     }
 
     const accessToken = await createAccessToken(user.id);
@@ -77,7 +78,7 @@ const app = new Hono()
     const refreshTokenCookie = getCookie(c, REFRESH_TOKEN_COOKIE_NAME);
 
     if (!refreshTokenCookie) {
-      return c.body(null, 401);
+      throw new HTTPException(401);
     }
 
     const refreshTokenCookieHashed = hashRefreshToken(refreshTokenCookie);
@@ -88,7 +89,7 @@ const app = new Hono()
       .where(eq(refreshTokensTable.hash, refreshTokenCookieHashed));
 
     if (!refreshToken) {
-      return c.body(null, 401);
+      throw new HTTPException(401);
     }
 
     if (refreshToken.revokedAt != null) {
@@ -97,11 +98,11 @@ const app = new Hono()
         .set({ revokedAt: new Date() })
         .where(eq(refreshTokensTable.userId, refreshToken.userId));
 
-      return c.body(null, 401);
+      throw new HTTPException(401);
     }
 
     if (refreshToken.expiresAt <= new Date()) {
-      return c.body(null, 401);
+      throw new HTTPException(401);
     }
 
     const accessToken = await createAccessToken(refreshToken.userId);
