@@ -82,6 +82,7 @@ const registerMutation = useMutation({
     }
   },
   onSuccess: () => {
+    alert.value = undefined;
     toast.add({
       title: "Welcome aboard 👋",
       description: "Account created successfully.",
@@ -91,7 +92,6 @@ const registerMutation = useMutation({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-  alert.value = undefined;
   registerMutation.mutate(event.data);
 };
 </script>
