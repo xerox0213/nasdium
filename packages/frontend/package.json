@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@nasdium/backend": "workspace:*",
+    "@nasdium/shared": "workspace:*",
+    "zod": "catalog:",
     "@nuxt/ui": "^4.8.2",
     "@tanstack/vue-query": "^5.101.0",
     "@tanstack/vue-query-devtools": "^6.1.34",
