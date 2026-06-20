@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import auth from "./features/auth/auth.routes";
+import users from "./features/users/users.route";
 
 const app = new Hono()
   .use(
@@ -11,7 +12,8 @@ const app = new Hono()
       credentials: true,
     }),
   )
-  .route("/", auth);
+  .route("/", auth)
+  .route("/", users);
 
 export type AppType = typeof app;
 
