@@ -9,7 +9,9 @@ useHead({
 
 <template>
   <UApp>
-    <RouterView />
+    <UContainer>
+      <RouterView />
+    </UContainer>
   </UApp>
 
   <VueQueryDevtools />
