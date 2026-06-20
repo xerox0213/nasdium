@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 
 import { db } from "@/core/db";
-import { authMiddleware } from "@/middleware/auth.middleware";
+import { authMiddleware } from "@/middlewares/auth.middleware";
 import { usersTable } from "@/tables/users.table";
 
 const app = new Hono().get("/me", authMiddleware, async (c) => {
