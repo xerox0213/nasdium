@@ -1,4 +1,4 @@
-import type { InferRequestType } from "hono/client";
+import type { InferRequestType } from "@nasdium/backend";
 
 import { api } from "@/core/api";
 

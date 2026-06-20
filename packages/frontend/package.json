@@ -14,15 +14,14 @@
   "dependencies": {
     "@nasdium/backend": "workspace:*",
     "@nasdium/shared": "workspace:*",
-    "zod": "catalog:",
     "@nuxt/ui": "^4.8.2",
     "@tanstack/vue-query": "^5.101.0",
     "@tanstack/vue-query-devtools": "^6.1.34",
     "@unhead/vue": "3.0.0-beta.9",
-    "hono": "catalog:",
     "tailwindcss": "^4.3.1",
     "vue": "^3.5.38",
-    "vue-router": "^5.1.0"
+    "vue-router": "^5.1.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

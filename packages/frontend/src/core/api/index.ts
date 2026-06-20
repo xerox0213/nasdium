@@ -1,5 +1,4 @@
-import type { AppType } from "@nasdium/backend";
-import { hc } from "hono/client";
+import { hcWithType } from "@nasdium/backend";
 
 import { HttpError } from "@/shared/errors/http-error";
 
@@ -38,7 +37,7 @@ const customFetch: typeof fetch = async (input, init) => {
   return res;
 };
 
-export const api = hc<AppType>(BASE_URL, {
+export const api = hcWithType(BASE_URL, {
   init: {
     credentials: "include",
   },
