@@ -1,6 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
-import { type JwtVariables, jwt } from "hono/jwt";
+import { jwt } from "hono/jwt";
 import * as z from "zod";
 
 import { ACCESS_TOKEN_COOKIE_NAME } from "@/shared/constants/auth.const";
