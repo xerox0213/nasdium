@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import auth from "./features/auth/auth.routes";
+import auth from "./features/auth/auth.route";
 import users from "./features/users/users.route";
 
 const app = new Hono()
