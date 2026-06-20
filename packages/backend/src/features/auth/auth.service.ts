@@ -6,9 +6,10 @@ import { sign } from "hono/jwt";
 
 import {
   ACCESS_TOKEN_COOKIE_NAME,
+  ACCESS_TOKEN_COOKIE_OPTS,
   ACCESS_TOKEN_TTL_S,
   REFRESH_TOKEN_COOKIE_NAME,
-  REFRESH_TOKEN_TTL_S,
+  REFRESH_TOKEN_COOKIE_OPTS,
 } from "@/shared/constants/auth.const";
 
 export const createAccessToken = async (userId: number) => {
@@ -24,14 +25,7 @@ export const createAccessToken = async (userId: number) => {
 };
 
 export const createAccessTokenCookie = (c: Context, accessToken: string) => {
-  setCookie(c, ACCESS_TOKEN_COOKIE_NAME, accessToken, {
-    secure: true,
-    httpOnly: true,
-    sameSite: "Strict",
-    path: "/",
-    domain: process.env.COOKIE_DOMAIN,
-    maxAge: ACCESS_TOKEN_TTL_S,
-  });
+  setCookie(c, ACCESS_TOKEN_COOKIE_NAME, accessToken, ACCESS_TOKEN_COOKIE_OPTS);
 };
 
 export const createRefreshToken = () => {
@@ -39,14 +33,12 @@ export const createRefreshToken = () => {
 };
 
 export const createRefreshTokenCookie = (c: Context, refreshToken: string) => {
-  setCookie(c, REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
-    secure: true,
-    httpOnly: true,
-    sameSite: "Strict",
-    path: "/",
-    domain: process.env.COOKIE_DOMAIN,
-    maxAge: REFRESH_TOKEN_TTL_S,
-  });
+  setCookie(
+    c,
+    REFRESH_TOKEN_COOKIE_NAME,
+    refreshToken,
+    REFRESH_TOKEN_COOKIE_OPTS,
+  );
 };
 
 export const hashRefreshToken = (refreshToken: string) => {
