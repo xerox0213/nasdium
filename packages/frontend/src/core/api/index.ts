@@ -6,6 +6,11 @@ import { router } from "../router";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Single-flight: concurrent 401s share one /refresh. With token rotation,
+// a second refresh would replay an already-rotated token → reuse detection
+// → full logout.
+let refreshTokenPromise: Promise<Response> | null = null;
+
 const customFetch: typeof fetch = async (input, init) => {
   let res = await fetch(input, init);
 
@@ -17,10 +22,16 @@ const customFetch: typeof fetch = async (input, init) => {
     url.endsWith("/refresh");
 
   if (res.status == 401 && !isAuthEndpoint) {
-    const refreshRes = await fetch(`${BASE_URL}/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
+    if (!refreshTokenPromise) {
+      refreshTokenPromise = fetch(`${BASE_URL}/refresh`, {
+        method: "POST",
+        credentials: "include",
+      }).finally(() => {
+        refreshTokenPromise = null;
+      });
+    }
+
+    const refreshRes = await refreshTokenPromise;
 
     if (!refreshRes.ok) {
       router.push({ name: "login" });
