@@ -27,7 +27,7 @@ export default defineConfig([
     languageOptions: { parserOptions: { parser: tseslint.parser } },
   },
   {
-    files: ["**/pages/*.vue"],
+    files: ["**/pages/**/*.vue"],
     rules: {
       "vue/multi-word-component-names": "off",
     },
