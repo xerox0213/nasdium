@@ -1,9 +1,20 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 
-const app = new Hono();
+import auth from "./features/auth/auth.route";
+import users from "./features/users/users.route";
 
-app.get("/", (c) => {
-  return c.json({ message: "Hello World" });
-});
+const app = new Hono()
+  .use(
+    "/*",
+    cors({
+      origin: process.env.FRONTEND_ORIGIN,
+      credentials: true,
+    }),
+  )
+  .route("/", auth)
+  .route("/", users);
+
+export type AppType = typeof app;
 
 export default app;

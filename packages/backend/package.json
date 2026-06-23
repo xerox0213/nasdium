@@ -8,15 +8,25 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "tsc:check": "tsc --noEmit",
+    "build:client": "tsdown --watch",
     "db:push": "bunx drizzle-kit push"
   },
   "exports": {
-    ".": "./src/main.ts"
+    ".": {
+      "import": {
+        "types": "./dist/client.d.mts",
+        "default": "./dist/client.mjs"
+      }
+    }
   },
   "dependencies": {
+    "@hono/standard-validator": "^0.2.2",
     "@libsql/client": "^0.17.3",
+    "@nasdium/shared": "workspace:*",
+    "@standard-schema/spec": "1.1.0",
     "drizzle-orm": "^0.45.2",
-    "hono": "catalog:"
+    "hono": "^4.12.25",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/bun": "latest",
