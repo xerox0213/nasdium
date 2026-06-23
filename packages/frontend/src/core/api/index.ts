@@ -1,7 +1,5 @@
 import { hcWithType } from "@nasdium/backend";
 
-import { HttpError } from "@/shared/errors/http-error";
-
 import { router } from "../router";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -40,10 +38,7 @@ const customFetch: typeof fetch = async (input, init) => {
     }
   }
 
-  if (!res.ok) {
-    const data = await res.json().catch(() => undefined);
-    throw new HttpError(res.status, data);
-  }
+  if (!res.ok) throw res;
 
   return res;
 };

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { login } from "@/features/auth/auth.api";
-import { HttpError } from "@/shared/errors/http-error";
 import { loginSchema } from "@nasdium/shared/schemas";
 import type { AlertProps, AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 import { useMutation } from "@tanstack/vue-query";
@@ -43,8 +42,8 @@ const alert = ref<AlertProps>();
 
 const loginMutation = useMutation({
   mutationFn: async (credentials: Schema) => login(credentials),
-  onError: (error) => {
-    if (error instanceof HttpError && error.status == 401) {
+  onError: (e) => {
+    if (e instanceof Response && e.status == 401) {
       alert.value = {
         title: "Invalid credentials",
         description: "Check your email and password, then try again.",

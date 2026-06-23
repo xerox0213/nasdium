@@ -5,7 +5,6 @@ import * as z from "zod";
 import { ref } from "vue";
 import { useMutation } from "@tanstack/vue-query";
 import { register } from "@/features/auth/auth.api";
-import { HttpError } from "@/shared/errors/http-error";
 import { useHead } from "@unhead/vue";
 
 definePage({
@@ -73,8 +72,8 @@ const alert = ref<AlertProps>();
 
 const registerMutation = useMutation({
   mutationFn: async (credentials: Schema) => register(credentials),
-  onError: (error) => {
-    if (error instanceof HttpError && error.status == 409) {
+  onError: (e) => {
+    if (e instanceof Response && e.status == 409) {
       alert.value = {
         title: "Email already in use",
         description: "Try logging in instead.",
