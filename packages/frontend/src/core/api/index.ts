@@ -31,9 +31,11 @@ const customFetch: typeof fetch = async (input, init) => {
 
     const refreshRes = await refreshTokenPromise;
 
-    if (!refreshRes.ok) {
+    const canRedirect = !url.endsWith("/me");
+
+    if (!refreshRes.ok && canRedirect) {
       router.push({ name: "login" });
-    } else {
+    } else if (refreshRes.ok) {
       res = await fetch(input, init);
     }
   }
