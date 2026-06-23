@@ -29,6 +29,7 @@
     "./typed-router.d.ts",
     "auto-imports.d.ts",
     "components.d.ts",
-    "tanstack.d.ts"
+    "tanstack.d.ts",
+    "meta-router.d.ts"
   ]
 }
